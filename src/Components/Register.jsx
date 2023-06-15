@@ -3,21 +3,24 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { registerAPI } from '../API/authAPI';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 const defaultTheme = createTheme(
     {
         palette: {
             primary: {
                 main: "#009688"
+            },
+            secondary: {
+                main: "#ffab40"
             }
         }
     }
@@ -70,10 +73,10 @@ export default function Register() {
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                        <AssignmentIndIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        First time? please refister your account
+                        Registration
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={3}>
@@ -142,7 +145,7 @@ export default function Register() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link to='/login' variant="body2">
+                                <Link to='/login' className=' text-[#009688] hover:underline'>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
