@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Register from './Components/Register';
+import LandingPage from './Pages/Landing';
 
 function App() {
   return (
@@ -9,7 +8,7 @@ function App() {
       <Routes>
         <Route path="/"
           element={
-            <Register />
+            <LandingPage />
           } />
       </Routes>
     </>
