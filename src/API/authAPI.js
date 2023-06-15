@@ -9,3 +9,10 @@ export function registerAPI(data){
         passwordConfirmation: data.passwordConfirmation
     })
 }
+
+export function loginAPI(data){
+    return axios.post(`${process.env.REACT_APP_API_URL}/auth/login`,{
+        loginDetails: data.loginDetails,
+        password: data.password
+    })
+}

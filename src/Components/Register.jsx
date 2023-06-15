@@ -11,8 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { registerAPI } from '../API/authAPI';
-import Alert from '@mui/material/Alert';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const defaultTheme = createTheme(
     {
@@ -29,12 +28,8 @@ export default function Register() {
         try {
             event.preventDefault();
             const data = new FormData(event.currentTarget);
-            console.log({
-                email: data.get('email'),
-                password: data.get('password'),
-            });
             const fullName = data.get('fullName');
-            const email = data.get('email');
+            const email = data.get('email').toLowerCase();
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
             const username = data.get('username');
@@ -78,7 +73,7 @@ export default function Register() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Register
+                        First time? please refister your account
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={3}>
@@ -147,7 +142,7 @@ export default function Register() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link to='/login' variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,32 +10,50 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import toast, { Toaster } from 'react-hot-toast';
+import { loginAPI } from '../API/authAPI';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
-// TODO remove, this demo shouldn't need to reset the theme.
+const defaultTheme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: "#009688"
+      }
+    }
+  }
+);
 
-const defaultTheme = createTheme();
+export default function Login() {
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      console.log({
+        email: data.get('email'),
+        password: data.get('password'),
+      });
+      const loginDetails = data.get('loginDetails');
+      const password = data.get('password');
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+      if (!loginDetails || !password) {
+        toast.error('all fields required');
+      } else {
+        const result = await loginAPI({
+          loginDetails,
+          password
+        })
+        if (result?.data?.success) {
+          localStorage.setItem('token', result.data.token)
+          toast.success(result.data.message);
+          // window.location.href = '/login';
+        } else {
+          toast.error(result.data.message);
+        }
+      }
+    } catch (error) {
+
+    }
   };
 
   return (
@@ -56,16 +72,19 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Welcome back
+          </Typography>
+          <Typography component="h1" variant="h7">
+            please login to continue
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+              id="loginDetails"
+              label="Email or Username"
+              name="loginDetails"
               autoComplete="email"
               autoFocus
             />
@@ -79,17 +98,13 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
               <Grid item xs>
@@ -105,8 +120,8 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <Toaster />
     </ThemeProvider>
   );
 }
