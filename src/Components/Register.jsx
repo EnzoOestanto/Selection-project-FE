@@ -14,7 +14,6 @@ import { registerAPI } from '../API/authAPI';
 import Alert from '@mui/material/Alert';
 import toast, { Toaster } from 'react-hot-toast';
 
-
 const defaultTheme = createTheme(
     {
         palette: {
