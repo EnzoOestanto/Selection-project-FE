@@ -16,3 +16,7 @@ export function loginAPI(data){
         password: data.password
     })
 }
+
+export function activationAPI(token){
+    return axios.get(`${process.env.REACT_APP_API_URL}/auth/activate/${token}`)
+}
