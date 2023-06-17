@@ -3,41 +3,50 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { registerAPI } from '../API/authAPI';
-import Alert from '@mui/material/Alert';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const defaultTheme = createTheme(
     {
         palette: {
             primary: {
                 main: "#009688"
+            },
+            secondary: {
+                main: "#ffab40"
             }
         }
     }
 );
 
 export default function Register() {
+    const [show, setShow] = React.useState(false)
+    const handleClickShow = () => {
+        setShow(!show)
+        console.log(show)
+    }
+    const [disable, setDisable] = React.useState(false)
+
     const handleSubmit = async (event) => {
         try {
             event.preventDefault();
+            setDisable(true)
             const data = new FormData(event.currentTarget);
-            console.log({
-                email: data.get('email'),
-                password: data.get('password'),
-            });
             const fullName = data.get('fullName');
-            const email = data.get('email');
+            const email = data.get('email').toLowerCase();
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
             const username = data.get('username');
+            
 
             if (!fullName || !username || !email || !password || !passwordConfirmation) {
                 toast.error('all fields required');
@@ -57,6 +66,7 @@ export default function Register() {
                     toast.error(result.data.message);
                 }
             }
+            setDisable(false)
         } catch (error) {
 
         }
@@ -75,10 +85,10 @@ export default function Register() {
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                        <AssignmentIndIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Register
+                        Registration
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={3}>
@@ -115,12 +125,27 @@ export default function Register() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <div className='flex justify-end'>
+                                    <Button onClick={handleClickShow}>
+                                        {
+                                            show ?
+                                                <div>
+                                                    HIDE
+                                                    <VisibilityOffIcon />
+                                                </div> :
+                                                <div>
+                                                    SHOW
+                                                    <VisibilityIcon />
+                                                </div>
+                                        }
+                                    </Button>
+                                </div>
                                 <TextField
                                     required
                                     fullWidth
                                     name="password"
                                     label="Password"
-                                    type="password"
+                                    type={show ? "text" : "password"}
                                     id="password"
                                     autoComplete="new-password"
                                 />
@@ -131,23 +156,34 @@ export default function Register() {
                                     fullWidth
                                     name="passwordConfirmation"
                                     label="Password Confirmation"
-                                    type="password"
+                                    type={show ? "text" : "password"}
                                     id="passwordConfirmation"
                                     autoComplete="new-password"
                                 />
                             </Grid>
                         </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Register
-                        </Button>
+                        {disable ?
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                                disabled
+                            >
+                                Register
+                            </Button> :
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Register
+                            </Button>
+                        }
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link to='/login' className=' text-[#009688] hover:underline'>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
