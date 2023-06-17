@@ -46,6 +46,7 @@ export default function Register() {
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
             const username = data.get('username');
+            
 
             if (!fullName || !username || !email || !password || !passwordConfirmation) {
                 toast.error('all fields required');
@@ -70,7 +71,6 @@ export default function Register() {
 
         }
     };
-
 
     return (
         <ThemeProvider theme={defaultTheme}>

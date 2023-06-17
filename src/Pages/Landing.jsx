@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import Register from "../Components/Register";
+import Register from "./Register";
 
 export default function LandingPage() {
     return (
