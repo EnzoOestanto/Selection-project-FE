@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -29,7 +29,7 @@ const defaultTheme = createTheme(
 
 export default function Activation() {
     const navigate = useNavigate()
-    const [disable, setDisable] = React.useState(false)
+    // const [disable, setDisable] = React.useState(false)
     const [params] = useSearchParams()
     const token = params?.get('token')
     // console.log(token)
@@ -50,7 +50,7 @@ export default function Activation() {
             toast.success(response?.data?.message)
             setTimeout(() => {
                 navigate('/login')
-            }, 1500);
+            }, 2000);
         } catch (error) {
 
         }

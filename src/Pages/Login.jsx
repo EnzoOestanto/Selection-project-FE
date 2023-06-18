@@ -33,17 +33,13 @@ export default function Login() {
   const [show, setShow] = React.useState(false)
   const handleClickShow = () => {
     setShow(!show)
-    console.log(show)
+    // console.log(show)
   }
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       setDisable(true)
       const data = new FormData(event.currentTarget);
-      console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-      });
       const loginDetails = data.get('loginDetails');
       const password = data.get('password');
       let result
@@ -59,7 +55,11 @@ export default function Login() {
           console.log('msaduk if')
           console.log(result?.data?.message)
           // localStorage.setItem('token', result?.data?.token)
-          localStorage.setItem('username', result?.data?.data?.username)
+          setTimeout(() => {
+            localStorage.setItem('username', result?.data?.data?.username)
+            localStorage.setItem('token', result?.data?.token)
+            localStorage.setItem('id', result?.data?.data?.id)
+          }, 2000);
           toast.success(result.data.message);
 
         } else {
@@ -160,12 +160,12 @@ export default function Login() {
               }
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link to='/forgotpassword' className=' text-[#009688] hover:underline'>
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to='/' className=' text-[#009688] hover:underline'>
+                  <Link to='/register' className=' text-[#009688] hover:underline'>
                     Don't have an account? Register
                   </Link>
                 </Grid>

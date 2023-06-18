@@ -8,13 +8,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { registerAPI } from '../API/authAPI';
+import { resetPasswordAPI } from '../API/authAPI';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
 
 const defaultTheme = createTheme(
     {
@@ -29,9 +28,12 @@ const defaultTheme = createTheme(
     }
 );
 
-export default function Register() {
-    const navigate = useNavigate()
+export default function ResetPassword() {
     const [show, setShow] = React.useState(false)
+    const [params] = useSearchParams()
+    const token = params?.get('token')
+    console.log('token', token)
+
     const handleClickShow = () => {
         setShow(!show)
         console.log(show)
@@ -43,30 +45,21 @@ export default function Register() {
             event.preventDefault();
             setDisable(true)
             const data = new FormData(event.currentTarget);
-            const fullName = data.get('fullName');
-            const email = data.get('email').toLowerCase();
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
-            const username = data.get('username');
-            
 
-            if (!fullName || !username || !email || !password || !passwordConfirmation) {
+            if (!password || !passwordConfirmation) {
                 toast.error('all fields required');
             } else {
-                const result = await registerAPI({
-                    fullName,
-                    email,
+                const result = await resetPasswordAPI({
                     password,
                     passwordConfirmation,
-                    username,
+                    token
                 })
 
                 if (result?.data?.success) {
                     toast.success(result.data.message);
-                    setTimeout(() => {
-                        navigate('/login')
-                    }, 2000);
-                    
+                    // window.location.href = '/login';
                 } else {
                     toast.error(result.data.message);
                 }
@@ -79,7 +72,7 @@ export default function Register() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Toaster/>
+            <Toaster />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -94,42 +87,13 @@ export default function Register() {
                         <AssignmentIndIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Registration
+                        Reset Password
+                    </Typography>
+                    <Typography component="h1" variant="h7">
+                        please enter your new password
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="full-name"
-                                    name="fullName"
-                                    required
-                                    fullWidth
-                                    id="fullName"
-                                    label="Full Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="username"
-                                    required
-                                    fullWidth
-                                    id="username"
-                                    label="Username"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email"
-                                    name="email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <div className='flex justify-end'>
                                     <Button onClick={handleClickShow}>
@@ -150,7 +114,7 @@ export default function Register() {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="New Password"
                                     type={show ? "text" : "password"}
                                     id="password"
                                     autoComplete="new-password"
@@ -176,7 +140,7 @@ export default function Register() {
                                 sx={{ mt: 3, mb: 2 }}
                                 disabled
                             >
-                                Register
+                                Submit new password
                             </Button> :
                             <Button
                                 type="submit"
@@ -184,13 +148,13 @@ export default function Register() {
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >
-                                Register
+                                Submit new password
                             </Button>
                         }
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link to='/login' className=' text-[#009688] hover:underline'>
-                                    Already have an account? Login
+                                    Already have an account? Sign in
                                 </Link>
                             </Grid>
                         </Grid>
