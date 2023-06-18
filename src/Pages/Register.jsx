@@ -48,7 +48,7 @@ export default function Register() {
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
             const username = data.get('username');
-            
+
 
             if (!fullName || !username || !email || !password || !passwordConfirmation) {
                 toast.error('all fields required');
@@ -66,7 +66,7 @@ export default function Register() {
                     setTimeout(() => {
                         navigate('/login')
                     }, 2000);
-                    
+
                 } else {
                     toast.error(result.data.message);
                 }
@@ -79,7 +79,7 @@ export default function Register() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Toaster/>
+            <Toaster />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -168,25 +168,15 @@ export default function Register() {
                                 />
                             </Grid>
                         </Grid>
-                        {disable ?
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                disabled
-                            >
-                                Register
-                            </Button> :
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Register
-                            </Button>
-                        }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            disabled={disable}
+                        >
+                            Register
+                        </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link to='/login' className=' text-[#009688] hover:underline'>

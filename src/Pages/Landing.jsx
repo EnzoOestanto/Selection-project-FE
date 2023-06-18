@@ -28,8 +28,7 @@ export default function LandingPage() {
         <>
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="md">
-
-                    <Grid container spacing={3}>
+                    <Grid container spacing={2}>
                         <Grid item xs={4} >
                             <LeftSidebar />
 
@@ -40,16 +39,7 @@ export default function LandingPage() {
                         </Grid>
                     </Grid>
                 </Container>
-
             </ThemeProvider>
-            <div className="w-full h-full flex justify-center items-center relative">
-                <div className="w-[30%] sticky top-0 left-0 ">
-
-                </div>
-                <div className="w-[50%] flex relative">
-
-                </div>
-            </div>
         </>
     )
 }

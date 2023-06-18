@@ -39,7 +39,7 @@ const LeftSidebar = () => {
         <>
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
-                    <Box sx={{ mt: 5 }}>
+                    <Box >
                         <Grid container spacing={2}>
                             <Grid item xs={12} >
                                 <div className="text-center">
@@ -50,7 +50,7 @@ const LeftSidebar = () => {
                             </Grid>
                             <Grid item xs={12} >
                                 <div className="text-center">
-                                    <Link to='/createpost'>
+                                    <Link to='/profile'>
                                         <ProfileCard />
                                     </Link>
                                 </div>

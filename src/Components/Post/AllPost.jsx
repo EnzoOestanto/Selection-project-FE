@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { getAllPost } from "../../API/postAPI";
+import { getAllPostAPI } from "../../API/postAPI";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 import PostCard from './PostCard';
@@ -31,7 +31,7 @@ export default function Allpost() {
     const getAll = async () => {
         try {
 
-            let response = await getAllPost()
+            let response = await getAllPostAPI()
             console.log('getall', response)
             setTimeline(response?.data?.data)
 
@@ -45,12 +45,10 @@ export default function Allpost() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <Toaster />
-            <Container component="main" maxWidth="xl">
-                <Box sx={{
-                    mt: 5,
-                }}>
+            <Container component="main" maxWidth="md">
+                <Box sx={{ mt: 5 }}>
 
-                    <Grid container spacing={3}>
+                    {/* <Grid  spacing={0}> */}
                         {
                             timeline?.map((value, index) => {
                                 console.log('value', value)
@@ -61,17 +59,9 @@ export default function Allpost() {
                                 )
                             })
                         }
-                        <Grid item xs={12}>
-
-                        </Grid>
-
-                        <Grid item xs={12}>
-
-                        </Grid>
-                    </Grid>
+                    {/* </Grid> */}
                 </Box>
             </Container >
         </ThemeProvider>
     )
-
 } 

@@ -6,6 +6,7 @@ import Login from './Pages/Login';
 import ForgotPassword from './Pages/ForgotPassword';
 import Register from './Pages/Register';
 import ResetPassword from './Pages/ResetPassword';
+import ProfilePage from './Pages/ProfilePage';
 
 function App() {
   return (
@@ -35,6 +36,11 @@ function App() {
           element={
             <ResetPassword />
           } />
+           <Route path="/profile"
+          element={
+            <ProfilePage />
+          } />
+
           
       </Routes>
     </>

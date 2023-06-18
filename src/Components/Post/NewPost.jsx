@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { createPost } from "../../API/postAPI";
+import { createPostAPI } from "../../API/postAPI";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ export default function NewPost() {
             const id = localStorage.getItem('id');
             const token = localStorage.getItem('token')
 
-            const response = await createPost({
+            const response = await createPostAPI({
                 post, id, image, token
             })
             console.log('response', response)
@@ -55,16 +55,10 @@ export default function NewPost() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <Toaster />
-            <Container component="main" maxWidth="xl">
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{
-                    mt: 5,
-                }}>
-                    <div className="my-4">
-                        <Typography component="h1" variant="h5">
-                            Create New Post
-                        </Typography>
-                    </div>
-                    <Grid container spacing={3}>
+            <Container component="main" maxWidth="md">
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 5, }}>
+
+                    <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
@@ -77,42 +71,28 @@ export default function NewPost() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography component="h1" variant="h7">
-                                Upload Image
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <input
-                                type="file"
-                                onChange={(e) => {
-                                    const file = e.target.files[0];
-                                    setImage(file)
-                                }}
-
-                            />
+                            <Button variant="outlined" >
+                                upload image
+                                <input
+                                    type="file"
+                                    onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        setImage(file)
+                                    }}
+                                    hidden
+                                />
+                            </Button>
                         </Grid>
                     </Grid>
-                    {
-                        disable ?
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                disabled
-                            >
-                                POST
-                            </Button>
-                            :
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                POST
-                            </Button>
-                    }
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                        disabled={disable}
+                    >
+                        POST
+                    </Button>
                 </Box>
             </Container >
         </ThemeProvider>
