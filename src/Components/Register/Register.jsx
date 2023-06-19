@@ -8,12 +8,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { registerAPI } from '../API/authAPI';
-import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { registerAPI } from '../../API/authAPI';
+import toast, { Toaster } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 const defaultTheme = createTheme(
     {
@@ -29,6 +30,7 @@ const defaultTheme = createTheme(
 );
 
 export default function Register() {
+    const navigate = useNavigate()
     const [show, setShow] = React.useState(false)
     const handleClickShow = () => {
         setShow(!show)
@@ -46,7 +48,7 @@ export default function Register() {
             const password = data.get('password');
             const passwordConfirmation = data.get('passwordConfirmation');
             const username = data.get('username');
-            
+
 
             if (!fullName || !username || !email || !password || !passwordConfirmation) {
                 toast.error('all fields required');
@@ -61,7 +63,10 @@ export default function Register() {
 
                 if (result?.data?.success) {
                     toast.success(result.data.message);
-                    // window.location.href = '/login';
+                    setTimeout(() => {
+                        navigate('/login')
+                    }, 2000);
+
                 } else {
                     toast.error(result.data.message);
                 }
@@ -74,11 +79,12 @@ export default function Register() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <Toaster />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 1,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -162,29 +168,19 @@ export default function Register() {
                                 />
                             </Grid>
                         </Grid>
-                        {disable ?
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                disabled
-                            >
-                                Register
-                            </Button> :
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Register
-                            </Button>
-                        }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            disabled={disable}
+                        >
+                            Register
+                        </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <Link to='/login' className=' text-[#009688] hover:underline'>
-                                    Already have an account? Sign in
+                                    Already have an account? Login
                                 </Link>
                             </Grid>
                         </Grid>
