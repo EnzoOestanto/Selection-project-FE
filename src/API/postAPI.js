@@ -17,7 +17,6 @@ export function createPostAPI(data) {
 }
 
 export function getAllPostAPI(page, limit) {
-    console.log('page', page)
     return axios.get(`${process.env.REACT_APP_API_URL}/posts?page=${page}&limit=${limit}`)
 }
 

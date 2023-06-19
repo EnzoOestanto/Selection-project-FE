@@ -16,13 +16,16 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { TextField } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { deletePostAPI, editPostAPI } from '../../API/postAPI';
 import { toast } from 'react-hot-toast';
 import { addLikeAPI, deleteLikeAPI, getLikesAPI } from '../../API/likeAPI';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { getUserAPI } from '../../API/userAPI';
+import { createCommentAPI, getAllCommentAPI } from '../../API/commentAPI';
+import Paper from '@mui/material/Paper';
+
 
 
 
@@ -52,6 +55,7 @@ export default function PostCard(props) {
     const userIdPost = props.userIdPost
     const [logedIn, setLogedIn] = React.useState(false)
     const [activactionStatus, setActivactionStatus] = React.useState(false)
+    const commentRef = React.useRef('')
 
     // if (props.username !== localStorage.getItem('username')) {
     //     setDisabled(true)
@@ -65,7 +69,7 @@ export default function PostCard(props) {
         try {
             if (userId) {
                 let response = await getUserAPI(userId)
-                console.log('PS', response)
+                // console.log('PS', response)
                 if (response?.data?.data?.status === true) {
                     setActivactionStatus(true)
                 }
@@ -78,7 +82,7 @@ export default function PostCard(props) {
 
 
     const userCheck = () => {
-        console.log('cehck user', userId, userIdPost)
+        // console.log('cehck user', userId, userIdPost)
         if (userIdPost !== userId) {
             setDisabled(true)
         }
@@ -94,8 +98,7 @@ export default function PostCard(props) {
 
     const deletePost = async () => {
         try {
-
-            console.log('deletePost')
+            // console.log('deletePost')
             const response = await deletePostAPI(postId)
             if (response?.data?.success === true) {
                 setTimeout(() => {
@@ -118,9 +121,9 @@ export default function PostCard(props) {
     const savePost = async () => {
         try {
             const text = textRef.current.value
-            console.log('text', text)
+            // console.log('text', text)
             const response = await editPostAPI({ postId, text })
-            console.log('respone', response)
+            // console.log('respone', response)
             if (response?.data?.success === true) {
                 setEdit(false)
                 setTimeout(() => {
@@ -138,7 +141,7 @@ export default function PostCard(props) {
     const [expanded, setExpanded] = React.useState(false);
     const [showImage, setShowImage] = React.useState(true)
     const date = new Date(props.date)
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', time: 'long' };
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const imageCheck = () => {
         if (!props.image) {
             setShowImage(false);
@@ -172,31 +175,58 @@ export default function PostCard(props) {
                 setRf(!rf)
             }
         } catch (error) {
-            console.error(error)
+            console.log(error)
         }
     }
     const handleUnlike = async () => {
         try {
             const response = await deleteLikeAPI({ postId, userId })
-            console.log('del', response)
+            // console.log('del', response)
             if (response?.data?.success === true) {
                 toast.success(response.data.message)
                 setRf(!rf)
             }
 
         } catch (error) {
-            console.error(error)
+            console.log(error)
         }
+    }
+    const saveComment = async () => {
+        try {
+            // console.log('saving comment')
+            const comment = commentRef.current.value
+            const response = await createCommentAPI({ comment, userId, postId })
+            if (response?.data?.success === true) {
+                commentRef.current.value = ''
+                toast.success(response.data.message)
+                setRf(!rf)
+            } else {
+                toast.error(response.data.message)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const [allComments, setAllComments] = React.useState([])
+    const commentLimit = 5
+    const getComments = async () => {
+        const response = await getAllCommentAPI({ postId, limit: commentLimit })
+        console.log('comments', response.data.data)
+        setAllComments(response?.data?.data)
     }
 
     React.useEffect(() => {
         getLikes()
+        getComments()
     }, [rf])
 
     React.useEffect(() => {
         imageCheck()
         userCheck()
+        loginCheck()
         getLikes()
+        getComments()
     }, [])
 
     return (
@@ -269,7 +299,7 @@ export default function PostCard(props) {
                 }
             </CardContent>
             {postLiked ? <>
-                <IconButton disabled={activactionStatus} sx={{ ml: 2, }} onClick={() => handleUnlike()} aria-label="add to favorites" color="error">
+                <IconButton disabled={!activactionStatus} sx={{ ml: 2, }} onClick={() => handleUnlike()} aria-label="add to favorites" color="error">
                     <FavoriteIcon />
                     <Typography sx={{ ml: 2 }} variant="body1" color="text.secondary">
                         {totalLikes}
@@ -277,13 +307,68 @@ export default function PostCard(props) {
                 </IconButton>
             </>
                 :
-                <IconButton disabled={activactionStatus} sx={{ ml: 2 }} onClick={() => handleLikes()} aria-label="add to favorites">
+                <IconButton disabled={!activactionStatus} sx={{ ml: 2 }} onClick={() => handleLikes()} aria-label="add to favorites">
                     <FavoriteBorderIcon />
                     <Typography sx={{ ml: 2 }} variant="body1" color="text.secondary">
                         {totalLikes}
                     </Typography>
                 </IconButton>
             }
-        </Card>
+            <Grid container justifyContent="center">
+                <Grid item xs={11}>
+                    <TextField
+                        fullWidth
+                        id="ftext"
+                        name="text"
+                        multiline
+                        label="Comment"
+                        inputRef={commentRef}
+                        disabled={!activactionStatus}
+                    />
+                    <div className='flex justify-end py-2'>
+                        <Button disabled={!activactionStatus} variant="contained" xs={12} size='small' onClick={() => saveComment()} >
+                            comment
+                        </Button>
+                    </div>
+                </Grid>
+                <Grid item xs={11} >
+                    <Typography>
+                        Comments
+                    </Typography>
+                </Grid>
+                {allComments?.map((value, index) => {
+                    return (
+                        <Grid container justifyContent="center" sx={{mr:2, ml:2, mb:1}} key={`${value}${index}`}>
+
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    margin: 'auto',
+                                    maxWidth: 500,
+                                    flexGrow: 1,
+                                    backgroundColor: (theme) =>
+                                        theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                                }}
+                            >
+                                <Grid item xs={11} >
+
+                                    <Typography align='left' variant="body2" color="text.secondary">
+                                        {value.user.username} commented:
+                                    </Typography>
+
+                                </Grid>
+
+                                <Grid item xs={11} >
+                                    <Typography variant="body2" color="text.secondary">
+                                        {value.comment}
+                                    </Typography>
+                                </Grid>
+
+                            </Paper>
+                        </Grid>
+                    )
+                })}
+            </Grid>
+        </Card >
     );
 }

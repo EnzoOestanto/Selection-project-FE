@@ -26,10 +26,7 @@ export function editProfileAPI(data) {
         });
 }
 
-export function emailRequestAPI(data) {
-    return axios.get(`${process.env.REACT_APP_API_URL}/users/emailrequest/${data.id}`,
-        {
-            text: data.text
-        });
+export function emailRequestAPI(id) {
+    return axios.get(`${process.env.REACT_APP_API_URL}/users/emailrequest/${id}`);
 }
 
