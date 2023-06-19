@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { createPostAPI } from "../../API/postAPI";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
+import { getUserAPI } from '../../API/userAPI';
 
 const defaultTheme = createTheme(
     {
@@ -24,6 +25,7 @@ const defaultTheme = createTheme(
 export default function NewPost() {
     const [disable, setDisable] = React.useState(false)
     const [image, setImage] = React.useState()
+    const [activactionStatus, setActivactionStatus] = React.useState(false)
     const navigate = useNavigate()
     const handleSubmit = async (event) => {
         try {
@@ -43,7 +45,7 @@ export default function NewPost() {
             console.log('response', response)
             if (response?.data?.success === true) {
                 setTimeout(() => {
-                    navigate('/')
+                    window.location.reload(false)
                 }, 2000);
                 toast.success(response.data.message)
             }
@@ -52,50 +54,80 @@ export default function NewPost() {
 
         }
     }
+    const id = localStorage.getItem('id')
+
+    const loginCheck = async () => {
+        try {
+            if (id) {
+                let response = await getUserAPI(id)
+                console.log('new', response)
+                if (response?.data?.data?.status === true) {
+                    setActivactionStatus(true)
+                } else {
+                    setDisable(true)
+                }
+            } else {
+                setDisable(true)
+            }
+        } catch (error) {
+
+        }
+    }
+
+    React.useEffect(() => {
+        loginCheck()
+    }, [])
+
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Toaster />
-            <Container component="main" maxWidth="md">
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 5, }}>
-
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                id="newPost"
-                                label="New Post"
-                                name="newPost"
-                                multiline
-                                rows={4}
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button variant="outlined" >
-                                upload image
-                                <input
-                                    type="file"
-                                    onChange={(e) => {
-                                        const file = e.target.files[0];
-                                        setImage(file)
-                                    }}
-                                    hidden
+        <>
+            <ThemeProvider theme={defaultTheme}>
+                <Toaster />
+                <Container component="main" maxWidth="md">
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 0, }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    id="newPost"
+                                    label="New Post"
+                                    name="newPost"
+                                    multiline
+                                    rows={4}
+                                    autoFocus
+                                    disabled={!activactionStatus}
                                 />
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        disabled={disable}
-                    >
-                        POST
-                    </Button>
-                </Box>
-            </Container >
-        </ThemeProvider>
-    )
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={5}>
+                                        <Button variant="outlined" component="label" disabled={!activactionStatus} >
+                                            <input hidden
+                                                type="file"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    setImage(file)
+                                                }}
+                                            />
+                                            upload image
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <Button
+                                            type="submit"
+                                            fullWidth
+                                            variant="contained"
 
-} 
+                                            disabled={disable}
+                                        >
+                                            POST
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Container >
+            </ThemeProvider>
+        </>
+    )
+}

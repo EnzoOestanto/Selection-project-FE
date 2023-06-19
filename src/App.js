@@ -2,11 +2,13 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import LandingPage from './Pages/Landing';
 import Activation from './Pages/Activation';
-import Login from './Pages/Login';
+import Login from './Components/Login/Login';
 import ForgotPassword from './Pages/ForgotPassword';
-import Register from './Pages/Register';
+import Register from './Components/Register/Register';
 import ResetPassword from './Pages/ResetPassword';
 import ProfilePage from './Pages/ProfilePage';
+import LoginPage from './Pages/LoginPage';
+import RegisterPage from './Pages/RegisterPage';
 
 function App() {
   return (
@@ -18,11 +20,12 @@ function App() {
           } />
         <Route path="/register"
           element={
-            <Register />
+            <RegisterPage />
           } />
         <Route path="/login"
           element={
-            <Login />
+           
+            <LoginPage />
           } />
           <Route path="/activation"
           element={

@@ -19,7 +19,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ProfileCard from "./Profile/ProfileCard";
-
+import LoginIcon from '@mui/icons-material/Login';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import { IconButton } from "@mui/material";
 
 const defaultTheme = createTheme(
     {
@@ -28,46 +32,110 @@ const defaultTheme = createTheme(
                 main: "#009688"
             },
             secondary: {
-                main: "#ffab40"
+                main: "#ffab40",
+                light: "#ffdd72"
             }
         }
     }
 );
 
-const LeftSidebar = () => {
+export default function LeftSidebar() {
+    const [logedIn, setLogedIn] = React.useState(false)
+
+    const id = localStorage.getItem('id')
+    const loginCheck = () => {
+        if (id) {
+            setLogedIn(true)
+        }
+    }
+
+    const logOut = () => {
+        localStorage.clear();
+        window.location.reload(false)
+    }
+    React.useEffect(() => {
+        loginCheck()
+    }, [])
+
     return (
         <>
-            <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="xs">
-                    <Box >
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} >
-                                <div className="text-center">
-                                    <Link to='/'>
-                                        <HomeIcon />
-                                    </Link>
-                                </div>
+            <div className=" sticky top-0">
+                <ThemeProvider theme={defaultTheme}>
+                    <Container component="main" maxWidth="xs">
+                        <Box sx={{
+                            backgroundColor: 'secondary.light',
+                        }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        <Link to='/'>
+                                            <IconButton size="large" >
+                                                <Diversity3Icon />
+                                            </IconButton>
+                                        </Link>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        {logedIn ?
+                                            <Link to='/profile'>
+
+                                                <ProfileCard />
+
+                                            </Link>
+                                            :
+                                            null
+                                        }
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        <Link to='/'>
+                                            <IconButton>
+                                                <HomeIcon /> Home
+                                            </IconButton>
+                                        </Link>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        {logedIn ?
+                                            null
+                                            :
+                                            <Link to='/login'>
+                                                <IconButton>
+                                                    <LoginIcon /> Login
+                                                </IconButton>
+                                            </Link>
+                                        }
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        {logedIn ?
+                                            null
+                                            :
+                                            <Link to='/register'>
+                                                <IconButton>
+                                                    <AssignmentIndIcon /> Register
+                                                </IconButton>
+                                            </Link>
+                                        }
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <div className="text-center">
+                                        <IconButton onClick={() => logOut()}>
+                                            <LogoutIcon /> Log Out
+                                        </IconButton>
+                                    </div>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} >
-                                <div className="text-center">
-                                    <Link to='/profile'>
-                                        <ProfileCard />
-                                    </Link>
-                                </div>
-                            </Grid>
-                            <Grid item xs={12} >
-                                <div className="text-center">
-                                    <Link to='/'>
-                                        <HomeIcon />
-                                    </Link>
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Container >
-            </ThemeProvider >
+                        </Box>
+                    </Container >
+                </ThemeProvider >
+            </div>
         </>
     );
 };
 
-export default LeftSidebar;

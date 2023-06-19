@@ -8,6 +8,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Allpost from "../Components/Post/AllPost";
 import { Box } from "@mui/material";
+import Login from "../Components/Login/Login";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 
 const defaultTheme = createTheme(
@@ -24,7 +27,17 @@ const defaultTheme = createTheme(
 );
 
 
-export default function LandingPage() {
+export default function LoginPage() {
+    const navigate = useNavigate()
+    const id = localStorage.getItem('id')
+    const loginCheck = () => {
+        if (id) {
+            navigate('/')
+        }
+    }
+    useEffect(() => {
+            loginCheck()
+        }, [])
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
@@ -33,12 +46,10 @@ export default function LandingPage() {
                         <Grid container spacing={2}>
                             <Grid item xs={4} >
                                 <LeftSidebar />
+
                             </Grid>
                             <Grid item xs={7}>
-                                <div className="sticky top-0 z-50 bg-white">
-                                    <NewPost />
-                                </div>
-                                <Allpost />
+                                <Login />
                             </Grid>
                         </Grid>
                     </Box>

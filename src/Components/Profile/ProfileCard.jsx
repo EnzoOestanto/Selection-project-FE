@@ -9,14 +9,14 @@ import { getUserAPI } from '../../API/userAPI';
 
 
 export default function ProfileCard(props) {
-    const [profileImage, setProfileImage] = React.useState(null);
+    const [profileImage, setProfileImage] = React.useState();
     const id = localStorage.getItem('id')
     const username = localStorage.getItem('username')
     
     
     const imageCheck = async() => {
         const response = await getUserAPI(id)
-        setProfileImage(response?.data?.image)
+        setProfileImage(response?.data?.data?.image)
         
     };
     React.useEffect(() => {

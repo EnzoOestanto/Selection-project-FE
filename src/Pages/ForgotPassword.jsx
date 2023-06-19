@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 import toast, { Toaster } from 'react-hot-toast';
 import { forgotPasswordAPI } from '../API/authAPI';
@@ -30,6 +30,7 @@ const defaultTheme = createTheme(
 export default function ForgotPassword() {
     const [disable, setDisable] = React.useState(false)
     const [show, setShow] = React.useState(false)
+    const navigate = useNavigate()
 
     const [params] = useSearchParams()
     const token = params?.get('token')
@@ -48,7 +49,9 @@ export default function ForgotPassword() {
                 const response = await forgotPasswordAPI(loginDetails)
                 console.log(response)
                 if (response?.data?.success === true) {
-                   
+                    setTimeout(() => {
+                        navigate('/')
+                    }, 2000);
                     toast.success(response?.data?.message)
                 } else {
                     toast.error(response?.data?.message)
@@ -71,7 +74,7 @@ export default function ForgotPassword() {
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    
+
                     <Box
                         sx={{
                             marginTop: 8,

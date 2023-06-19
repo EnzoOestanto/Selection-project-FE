@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resetPasswordAPI } from '../API/authAPI';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -31,6 +31,7 @@ const defaultTheme = createTheme(
 export default function ResetPassword() {
     const [show, setShow] = React.useState(false)
     const [params] = useSearchParams()
+    const navigate = useNavigate()
     const token = params?.get('token')
     console.log('token', token)
 
@@ -59,7 +60,10 @@ export default function ResetPassword() {
 
                 if (result?.data?.success) {
                     toast.success(result.data.message);
-                    // window.location.href = '/login';
+                    setTimeout(() => {
+                        navigate('/');
+
+                    }, 2000);
                 } else {
                     toast.error(result.data.message);
                 }
