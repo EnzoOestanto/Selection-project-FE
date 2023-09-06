@@ -31,3 +31,8 @@ export function deletePostAPI(postId) {
     return axios.delete(`${process.env.REACT_APP_API_URL}/posts/${postId}`)
 }
 
+export function getSinglePostAPI(postId) {
+    console.log('postid', postId)
+    return axios.get(`${process.env.REACT_APP_API_URL}/posts/${postId}`)
+}
+
