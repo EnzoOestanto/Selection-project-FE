@@ -25,7 +25,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { getUserAPI } from '../../API/userAPI';
 import { createCommentAPI, getAllCommentAPI } from '../../API/commentAPI';
 import Paper from '@mui/material/Paper';
-
+import { Link } from 'react-router-dom';
 
 
 
@@ -257,6 +257,11 @@ export default function PostCard(props) {
                         >
                             <MenuItem onClick={() => { deletePost() }}>Delete</MenuItem>
                             <MenuItem onClick={() => { editPost() }}>Edit</MenuItem>
+                            <MenuItem>
+                                <Link to={`http://localhost:3000/post?postId=${postId}`}>
+                                    Details
+                                </Link>
+                            </MenuItem>
                         </Menu>
                     </>
                 }
@@ -338,7 +343,7 @@ export default function PostCard(props) {
                 </Grid>
                 {allComments?.map((value, index) => {
                     return (
-                        <Grid container justifyContent="center" sx={{mr:2, ml:2, mb:1}} key={`${value}${index}`}>
+                        <Grid container justifyContent="center" sx={{ mr: 2, ml: 2, mb: 1 }} key={`${value}${index}`}>
 
                             <Paper
                                 sx={{
